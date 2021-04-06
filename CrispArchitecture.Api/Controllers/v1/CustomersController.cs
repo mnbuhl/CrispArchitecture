@@ -15,19 +15,19 @@ namespace CrispArchitecture.Api.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
 
-        public CustomersController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CustomersController(ICustomerService customerService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _customerService = customerService;
             _mapper = mapper;
         }
 
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var customer = await _unitOfWork.CustomerRepository.GetAsync(id);
+            var customer = await _customerService.GetCustomerAsync(id);
 
             if (customer == null)
                 return NotFound();
@@ -38,7 +38,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Customer> customers = await _unitOfWork.CustomerRepository.GetAllAsync();
+            IList<Customer> customers = await _customerService.GetAllCustomerAsync();
             return Ok(_mapper.Map<List<CustomerResponseDto>>(customers));
         }
 
@@ -50,8 +50,10 @@ namespace CrispArchitecture.Api.Controllers.v1
 
             var customer = _mapper.Map<Customer>(customerRequest);
 
-            await _unitOfWork.CustomerRepository.CreateAsync(customer);
-            await _unitOfWork.SaveAsync();
+            bool created = await _customerService.CreateCustomerAsync(customer);
+            
+            if (!created)
+                return BadRequest();
             
             string locationUri = new LocationUri().GetLocationUri(HttpContext.Request, customer.Id.ToString());
             var customerResponse = _mapper.Map<CustomerResponseDto>(customer);
@@ -65,14 +67,17 @@ namespace CrispArchitecture.Api.Controllers.v1
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var customerToUpdate = await _unitOfWork.CustomerRepository.GetAsync(id);
+            var customerToUpdate = await _customerService.GetCustomerAsync(id);
 
             if (customerToUpdate == null)
                 return NotFound();
 
             _mapper.Map(customerRequest, customerToUpdate);
-            _unitOfWork.CustomerRepository.Update(customerToUpdate);
-            await _unitOfWork.SaveAsync();
+            
+            bool updated = await _customerService.UpdateCustomerAsync(customerToUpdate);
+
+            if (!updated)
+                return BadRequest();
 
             return NoContent();
         }
@@ -80,8 +85,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _unitOfWork.CustomerRepository.DeleteAsync(id);
-            bool deleted = await _unitOfWork.SaveAsync() > 0;
+            bool deleted = await _customerService.DeleteCustomerAsync(id);
 
             if (!deleted)
                 return NotFound();

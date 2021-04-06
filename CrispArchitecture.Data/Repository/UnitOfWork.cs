@@ -1,34 +1,35 @@
 using System;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Domain.Entities;
 
 namespace CrispArchitecture.Data.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        private ICustomerRepository _customerRepository;
-        private IProductRepository _productRepository;
-        private IOrderRepository _orderRepository;
+        private IGenericRepository<Customer> _customerRepository;
+        private IGenericRepository<Product> _productRepository;
+        private IGenericRepository<Order> _orderRepository;
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
         }
 
-        public ICustomerRepository CustomerRepository
+        public IGenericRepository<Customer> CustomerRepository
         {
-            get { return _customerRepository ??= new CustomerRepository(_context); }
+            get { return _customerRepository ??= new GenericRepository<Customer>(_context); }
         }
 
-        public IProductRepository ProductRepository
+        public IGenericRepository<Product> ProductRepository
         {
-            get { return _productRepository ??= new ProductRepository(_context); }
+            get { return _productRepository ??= new GenericRepository<Product>(_context); }
         }
         
-        public IOrderRepository OrderRepository
+        public IGenericRepository<Order> OrderRepository
         {
-            get { return _orderRepository ??= new OrderRepository(_context); }
+            get { return _orderRepository ??= new GenericRepository<Order>(_context); }
         }
 
         public async Task<int> SaveAsync()

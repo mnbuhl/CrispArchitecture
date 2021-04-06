@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrispArchitecture.Domain.Entities
 {
-    public class Order
+    public class Order : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-        
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<LineItem> LineItems { get; set; }
         public double Total { get; set; }

@@ -4,11 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CrispArchitecture.Domain.Entities
 {
-    public class Customer
+    public class Customer : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
         public string Phone { get; set; } 
         public string Email { get; set; }

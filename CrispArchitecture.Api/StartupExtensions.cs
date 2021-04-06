@@ -2,6 +2,7 @@ using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Data;
 using CrispArchitecture.Data.Repository;
+using CrispArchitecture.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,9 @@ namespace CrispArchitecture.Api
         public static void ConfigureInstances(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICustomerService, CustomerService>();
         }
 
         public static void ConfigureAutoMapper(this IServiceCollection services)

@@ -15,19 +15,19 @@ namespace CrispArchitecture.Api.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
 
-        public OrdersController(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrdersController(IMapper mapper, IOrderService orderService)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _orderService = orderService;
         }
         
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var order = await _unitOfWork.OrderRepository.GetAsync(id);
+            var order = await _orderService.GetOrderAsync(id);
 
             if (order == null)
                 return NotFound();
@@ -38,44 +38,26 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Order> orders = await _unitOfWork.OrderRepository.GetAllAsync();
+            IList<Order> orders = await _orderService.GetAllOrdersAsync();
             return Ok(_mapper.Map<List<OrderResponseDto>>(orders));
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] OrderCommandDto orderRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+        
             var order = _mapper.Map<Order>(orderRequest);
 
-            double total = 0;
-            
-            foreach (var item in order.LineItems)
-            {
-                var product = await _unitOfWork.ProductRepository.GetAsync(item.ProductId);
+            bool created = await _orderService.CreateOrderAsync(order);
 
-                if (product == null)
-                {
-                    total = -1;
-                    break;
-                }
-
-                total += product.Price * item.Amount;
-            }
-            
-            if (total <= 0)
+            if (!created)
                 return BadRequest();
-            
-            order.Total = total;
-
-            await _unitOfWork.OrderRepository.CreateAsync(order);
-            await _unitOfWork.SaveAsync();
             
             string locationUri = new LocationUri().GetLocationUri(HttpContext.Request, order.Id.ToString());
             var orderResponse = _mapper.Map<OrderResponseDto>(order);
-
+        
             return Created(locationUri, orderResponse);
         }
         
@@ -84,36 +66,18 @@ namespace CrispArchitecture.Api.Controllers.v1
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var orderToUpdate = await _unitOfWork.OrderRepository.GetAsync(id);
-
+        
+            var orderToUpdate = await _orderService.GetOrderAsync(id);
+        
             if (orderToUpdate == null)
                 return NotFound();
-
+        
             _mapper.Map(orderRequest, orderToUpdate);
-            
-            double total = 0;
-            
-            foreach (var item in orderToUpdate.LineItems)
-            {
-                var product = await _unitOfWork.ProductRepository.GetAsync(item.ProductId);
 
-                if (product == null)
-                {
-                    total = -1;
-                    break;
-                }
+            bool updated = await _orderService.UpdateOrderAsync(orderToUpdate);
 
-                total += product.Price * item.Amount;
-            }
-            
-            if (total <= 0)
-                return BadRequest();
-            
-            orderToUpdate.Total = total;
-            
-            _unitOfWork.OrderRepository.Update(orderToUpdate);
-            await _unitOfWork.SaveAsync();
+            if (!updated)
+                return NotFound();
 
             return NoContent();
         }
@@ -121,12 +85,11 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _unitOfWork.OrderRepository.DeleteAsync(id);
-            bool deleted = await _unitOfWork.SaveAsync() > 0;
-
+            bool deleted = await _orderService.DeleteOrderAsync(id);
+        
             if (!deleted)
                 return NotFound();
-
+        
             return NoContent();
         }
     }

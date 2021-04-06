@@ -8,7 +8,6 @@ namespace CrispArchitecture.Application.Contracts.v1.Orders
     {
         [Required]
         public Guid CustomerId { get; set; }
-        [Required]
         public ICollection<LineItemCommandDto> LineItems { get; set; }
     }
 }
