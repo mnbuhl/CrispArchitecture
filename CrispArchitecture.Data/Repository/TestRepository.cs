@@ -43,8 +43,9 @@ namespace CrispArchitecture.Data.Repository
         public async Task DeleteAsync(Guid id)
         {
             var test = await _context.Tests.FindAsync(id);
-
-            _context.Tests.Remove(test);
+            
+            if (test != null)
+                _context.Tests.Remove(test);
         }
     }
 }

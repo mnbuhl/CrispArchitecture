@@ -8,6 +8,9 @@ namespace CrispArchitecture.Application.Interfaces
         // Add future repositories to this interface
         ITestRepository TestRepository { get; }
         ITestOwnerRepository TestOwnerRepository { get; }
+        ICustomerRepository CustomerRepository { get; }
+        IProductRepository ProductRepository { get; }
+        IOrderRepository OrderRepository { get; }
         Task<int> SaveAsync();
     }
 }
