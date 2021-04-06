@@ -30,17 +30,12 @@ namespace CrispArchitecture.Data.Repository
         public async Task<List<Order>> GetAllAsync()
         {
             return await _context.Orders
-                .Include(o => o.LineItems)
-                .ThenInclude(li => li.Product)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task CreateAsync(Order order)
         {
-            if (order.LineItems != null)
-                await _context.LineItems.AddRangeAsync(order.LineItems);
-
             await _context.Orders.AddAsync(order);
         }
 
