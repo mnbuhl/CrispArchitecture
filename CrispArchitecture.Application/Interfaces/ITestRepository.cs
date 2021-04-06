@@ -10,7 +10,7 @@ namespace CrispArchitecture.Application.Interfaces
         Task<Test> GetAsync(Guid id);
         Task<List<Test>> GetAllAsync();
         Task PostAsync(Test test);
-        void UpdateAsync(Test test);
+        void Update(Test test);
         Task DeleteAsync(Guid id);
     }
 }

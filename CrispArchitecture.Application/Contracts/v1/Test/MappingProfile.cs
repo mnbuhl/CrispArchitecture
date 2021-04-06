@@ -7,6 +7,7 @@ namespace CrispArchitecture.Application.Contracts.v1.Test
         public MappingProfile()
         {
             CreateMap<CreateTestDto, Domain.Entities.Test>();
+            CreateMap<UpdateTestDto, Domain.Entities.Test>();
             CreateMap<Domain.Entities.Test, TestResponseDto>();
         }
     }

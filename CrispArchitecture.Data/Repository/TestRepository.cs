@@ -35,7 +35,7 @@ namespace CrispArchitecture.Data.Repository
             await _context.Tests.AddAsync(test);
         }
 
-        public void UpdateAsync(Test test)
+        public void Update(Test test)
         {
             _context.Tests.Update(test);
         }
