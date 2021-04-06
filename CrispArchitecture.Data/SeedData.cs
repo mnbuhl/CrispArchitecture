@@ -10,63 +10,119 @@ namespace CrispArchitecture.Data
     {
         public static async Task SeedDatabase(AppDbContext context)
         {
-            if (!context.Tests.Any())
+            Guid product1 = Guid.NewGuid();
+            Guid product2 = Guid.NewGuid();
+            Guid product3 = Guid.NewGuid();
+            Guid product4 = Guid.NewGuid();
+
+            if (!context.Products.Any())
             {
-                List<Test> tests = new List<Test>
+                List<Product> products = new List<Product>
                 {
-                    new Test
+                    new Product
                     {
-                        TestValue1 = "test1",
-                        TestValue2 = 0,
-                        TestEmail = "helloworld@example.com"
+                        Id = product1,
+                        Name = "Office Chair",
+                        Price = 149.99
                     },
-                    new Test
+                    new Product
                     {
-                        TestValue1 = "test2",
-                        TestValue2 = 1,
-                        TestEmail = "helloworld1@example.com"
+                        Id = product2,
+                        Name = "Height Adjustable Desk",
+                        Price = 409.99
                     },
-                    new Test
+                    new Product
                     {
-                        TestValue1 = "test3",
-                        TestValue2 = 2,
-                        TestEmail = "helloworld4@example.com"
+                        Id = product3,
+                        Name = "Desk Drawer",
+                        Price = 129.99
                     },
-                    new Test
+                    new Product
                     {
-                        TestValue1 = "test4",
-                        TestValue2 = 3,
-                        TestEmail = "helloworld2@example.com"
+                        Id = product4,
+                        Name = "L-Shaped Desk",
+                        Price = 399.99
                     },
-                    new Test
-                    {
-                        TestValue1 = "test5",
-                        TestValue2 = 4,
-                        TestEmail = "helloworld6@example.com"
-                    }
                 };
-                await context.Tests.AddRangeAsync(tests);
+
+                await context.Products.AddRangeAsync(products);
             }
 
-            if (!context.TestOwners.Any())
+            if (!context.Customers.Any() && !context.Orders.Any())
             {
-                List<TestOwner> testOwners = new List<TestOwner>
+                Guid customer1 = Guid.NewGuid();
+                Guid customer2 = Guid.NewGuid();
+                
+                List<Customer> customers = new List<Customer>
                 {
-                    new TestOwner
+                    new Customer
                     {
-                        TestId = Guid.Parse("C7D769C5-87E3-4B81-5E1E-08D8F8A3E23D")
+                       Id = customer1,
+                       Name = "Ben Hansel",
+                       Email = "benhansel@gmail.com",
+                       Phone = "12345678"
                     },
-                    new TestOwner
+                    new Customer
                     {
-                        TestId = Guid.Parse("3A518A69-6CE6-4761-5E1F-08D8F8A3E23D")
-                    },
-                    new TestOwner
-                    {
-                        TestId = Guid.Parse("E924A9E6-54F3-4C2E-5E20-08D8F8A3E23D")
+                       Id = customer2,
+                       Name = "Ben Hansel",
+                       Email = "benhansel@gmail.com",
+                       Phone = "12345678"
                     }
                 };
 
-                await context.TestOwners.AddRangeAsync(testOwners);
+                Guid order1 = Guid.NewGuid();
+                Guid order2 = Guid.NewGuid();
+
+                List<Order> orders = new List<Order>
+                {
+                    new Order
+                    {
+                        Id = order1,
+                        CustomerId = customer1,
+                        Total = 149.99,
+                        IsPaid = false,
+                    },
+                    new Order
+                    {
+                        Id = order2,
+                        CustomerId = customer2,
+                        Total = 939.97,
+                        IsPaid = false,
+                    },
+                };
+
+                List<LineItem> lineItems = new List<LineItem>
+                {
+                    new LineItem
+                    {
+                        OrderId = order1,
+                        ProductId = product1,
+                        Amount = 1
+                    },
+                    new LineItem
+                    {
+                        OrderId = order2,
+                        ProductId = product2,
+                        Amount = 1
+                    },
+                    new LineItem
+                    {
+                        OrderId = order2,
+                        ProductId = product3,
+                        Amount = 1
+                    },
+                    new LineItem
+                    {
+                        OrderId = order2,
+                        ProductId = product4,
+                        Amount = 1
+                    }
+                };
+
+                await context.Customers.AddRangeAsync(customers);
+                await context.Orders.AddRangeAsync(orders);
+                await context.LineItems.AddRangeAsync(lineItems);
             }
             
             await context.SaveChangesAsync();
