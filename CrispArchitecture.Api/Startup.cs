@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace CrispArchitecture.Api
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -20,6 +19,7 @@ namespace CrispArchitecture.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureDatabase(_configuration);
+            services.RegisterServices();
             services.ConfigureSwagger();
             services.ConfigureControllers();
         }
@@ -40,10 +40,7 @@ namespace CrispArchitecture.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

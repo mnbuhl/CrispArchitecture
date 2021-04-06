@@ -8,4 +8,8 @@
       <ProjectReference Include="..\CrispArchitecture.Domain\CrispArchitecture.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Contracts" />
+    </ItemGroup>
+
 </Project>

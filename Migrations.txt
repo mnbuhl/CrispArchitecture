@@ -1,0 +1,1 @@
+dotnet ef migrations add InitialCreate -s CrispArchitecture.Api -p CrispArchitecture.Data

@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace CrispArchitecture.Test
@@ -8,7 +7,6 @@ namespace CrispArchitecture.Test
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

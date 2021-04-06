@@ -1,4 +1,6 @@
+using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Data;
+using CrispArchitecture.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +14,12 @@ namespace CrispArchitecture.Api
         {
             services.AddDbContext<AppDbContext>(options => 
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
-                    opt => opt.MigrationsAssembly("Data")));
+                    opt => opt.MigrationsAssembly("CrispArchitecture.Data")));
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
         
         public static void ConfigureControllers(this IServiceCollection services)
