@@ -7,8 +7,6 @@ namespace CrispArchitecture.Data.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        private ITestRepository _testRepository;
-        private ITestOwnerRepository _testOwnerRepository;
         private ICustomerRepository _customerRepository;
         private IProductRepository _productRepository;
         private IOrderRepository _orderRepository;
@@ -16,16 +14,6 @@ namespace CrispArchitecture.Data.Repository
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-        }
-
-        public ITestRepository TestRepository
-        {
-            get { return _testRepository ??= new TestRepository(_context); }
-        }
-        
-        public ITestOwnerRepository TestOwnerRepository
-        {
-            get { return _testOwnerRepository ??= new TestOwnerRepository(_context); }
         }
 
         public ICustomerRepository CustomerRepository

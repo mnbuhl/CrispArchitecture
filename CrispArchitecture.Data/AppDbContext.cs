@@ -8,9 +8,7 @@ namespace CrispArchitecture.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
-        public DbSet<Test> Tests { get; set; }
-        public DbSet<TestOwner> TestOwners { get; set; }
+        
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<LineItem> LineItems { get; set; }

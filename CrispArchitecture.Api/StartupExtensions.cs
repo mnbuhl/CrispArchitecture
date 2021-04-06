@@ -1,4 +1,4 @@
-using CrispArchitecture.Application.Contracts.v1.Test;
+using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Data;
 using CrispArchitecture.Data.Repository;

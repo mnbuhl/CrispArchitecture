@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CrispArchitecture.Application.Contracts.v1.Customers;
 
 namespace CrispArchitecture.Application.Contracts.v1.Orders
 {
