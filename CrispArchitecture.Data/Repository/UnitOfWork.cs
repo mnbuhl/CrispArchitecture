@@ -8,6 +8,7 @@ namespace CrispArchitecture.Data.Repository
     {
         private readonly AppDbContext _context;
         private ITestRepository _testRepository;
+        private ITestOwnerRepository _testOwnerRepository;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -17,6 +18,11 @@ namespace CrispArchitecture.Data.Repository
         public ITestRepository TestRepository
         {
             get { return _testRepository ??= new TestRepository(_context); }
+        }
+        
+        public ITestOwnerRepository TestOwnerRepository
+        {
+            get { return _testOwnerRepository ??= new TestOwnerRepository(_context); }
         }
 
         public async Task<int> SaveAsync()

@@ -21,6 +21,7 @@ namespace CrispArchitecture.Api
             services.ConfigureDataStorage(_configuration);
             services.ConfigureInstances();
             services.ConfigureVersioning();
+            services.ConfigureAutoMapper();
             services.ConfigureSwagger();
             services.ConfigureControllers();
         }

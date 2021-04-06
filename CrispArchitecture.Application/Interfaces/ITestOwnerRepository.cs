@@ -5,12 +5,12 @@ using CrispArchitecture.Domain.Entities;
 
 namespace CrispArchitecture.Application.Interfaces
 {
-    public interface ITestRepository
+    public interface ITestOwnerRepository
     {
-        Task<Test> GetAsync(Guid id);
-        Task<List<Test>> GetAllAsync();
-        Task PostAsync(Test test);
-        void UpdateAsync(Test test);
+        Task<TestOwner> GetAsync(Guid id);
+        Task<List<TestOwner>> GetAllAsync();
+        Task PostAsync(TestOwner testOwner);
+        void UpdateAsync(TestOwner test);
         Task DeleteAsync(Guid id);
     }
 }

@@ -1,3 +1,4 @@
+using CrispArchitecture.Application.Contracts.v1.Test;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Data;
 using CrispArchitecture.Data.Repository;
@@ -21,6 +22,11 @@ namespace CrispArchitecture.Api
         public static void ConfigureInstances(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static void ConfigureAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
         }
 
         public static void ConfigureVersioning(this IServiceCollection services)
