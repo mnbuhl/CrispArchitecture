@@ -40,12 +40,14 @@ namespace CrispArchitecture.Data.Services
 
         public async Task<bool> CreateOrderAsync(Order order)
         {
+            order.Total = await GetOrderTotal(order.LineItems);
             await _unitOfWork.OrderRepository.CreateAsync(order);
             return await _unitOfWork.SaveAsync() > 0;
         }
 
         public async Task<bool> UpdateOrderAsync(Order order)
         {
+            order.Total += await GetOrderTotal(order.LineItems);
             _unitOfWork.OrderRepository.Update(order);
             return await _unitOfWork.SaveAsync() > 0;
         }
@@ -54,6 +56,20 @@ namespace CrispArchitecture.Data.Services
         {
             await _unitOfWork.OrderRepository.DeleteAsync(id);
             return await _unitOfWork.SaveAsync() > 0;
+        }
+        
+        private async Task<double> GetOrderTotal(ICollection<LineItem> lineItems)
+        {
+            double total = 0;
+
+            foreach (var lineItem in lineItems)
+            {
+                var product = await _unitOfWork.ProductRepository.GetAsync(x => x.Id == lineItem.ProductId);
+
+                total += product.Price * lineItem.Amount;
+            }
+
+            return total;
         }
     }
 }
