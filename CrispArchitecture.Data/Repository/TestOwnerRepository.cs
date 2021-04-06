@@ -19,6 +19,7 @@ namespace CrispArchitecture.Data.Repository
         public async Task<TestOwner> GetAsync(Guid id)
         {
             var testOwner = await _context.TestOwners
+                .Include(t => t.Test)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -27,7 +28,10 @@ namespace CrispArchitecture.Data.Repository
 
         public async Task<List<TestOwner>> GetAllAsync()
         {
-            return await _context.TestOwners.AsNoTracking().ToListAsync();
+            return await _context.TestOwners
+                .Include(t => t.Test)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task PostAsync(TestOwner testOwner)
