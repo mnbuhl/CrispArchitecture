@@ -3,9 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Api", "CrispArchitechture.Api\CrispArchitecture.Api.csproj", "{D81E33D8-9060-4017-9D9E-9BCF2F7D5B75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrispArchitecture.Api", "CrispArchitechture.Api\CrispArchitecture.Api.csproj", "{D81E33D8-9060-4017-9D9E-9BCF2F7D5B75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Application", "CrispArchitecture.Application\CrispArchitecture.Application.csproj", "{7414BD77-17CE-42DB-A143-B52579377F25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrispArchitecture.Application", "CrispArchitecture.Application\CrispArchitecture.Application.csproj", "{7414BD77-17CE-42DB-A143-B52579377F25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Domain", "CrispArchitecture.Domain\CrispArchitecture.Domain.csproj", "{5F218BEF-6C9F-4019-81B1-F789291406C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Data", "CrispArchitecture.Data\CrispArchitecture.Data.csproj", "{82066207-F193-4B12-820D-F1E62609209C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0B74CB2-BEAE-40A5-BB89-2753A52DCA58}"
+	ProjectSection(SolutionItems) = preProject
+		Migrations.txt = Migrations.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Test", "CrispArchitecture.Test\CrispArchitecture.Test.csproj", "{CB95EC93-5963-4344-B176-49DACACB2DB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +32,18 @@ Global
 		{7414BD77-17CE-42DB-A143-B52579377F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7414BD77-17CE-42DB-A143-B52579377F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7414BD77-17CE-42DB-A143-B52579377F25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F218BEF-6C9F-4019-81B1-F789291406C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F218BEF-6C9F-4019-81B1-F789291406C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F218BEF-6C9F-4019-81B1-F789291406C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F218BEF-6C9F-4019-81B1-F789291406C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82066207-F193-4B12-820D-F1E62609209C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82066207-F193-4B12-820D-F1E62609209C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82066207-F193-4B12-820D-F1E62609209C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82066207-F193-4B12-820D-F1E62609209C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB95EC93-5963-4344-B176-49DACACB2DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB95EC93-5963-4344-B176-49DACACB2DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB95EC93-5963-4344-B176-49DACACB2DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB95EC93-5963-4344-B176-49DACACB2DB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
