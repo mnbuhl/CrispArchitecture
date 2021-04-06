@@ -10,5 +10,6 @@ namespace CrispArchitecture.Data
         }
 
         public DbSet<Test> Tests { get; set; }
+        public DbSet<TestOwner> TestOwners { get; set; }
     }
 }

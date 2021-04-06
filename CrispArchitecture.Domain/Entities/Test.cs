@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrispArchitecture.Domain.Entities
@@ -13,5 +14,7 @@ namespace CrispArchitecture.Domain.Entities
 
         [EmailAddress]
         public string TestEmail { get; set; }
+
+        public ICollection<TestOwner> TestOwners { get; set; }
     }
 }

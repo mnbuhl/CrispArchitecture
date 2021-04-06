@@ -1,6 +1,7 @@
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Data;
 using CrispArchitecture.Data.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,18 +11,28 @@ namespace CrispArchitecture.Api
 {
     public static class StartupExtensions
     {
-        public static void ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureDataStorage(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options => 
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     opt => opt.MigrationsAssembly("CrispArchitecture.Data")));
         }
 
-        public static void RegisterServices(this IServiceCollection services)
+        public static void ConfigureInstances(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
-        
+
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+            });
+        }
+
         public static void ConfigureControllers(this IServiceCollection services)
         {
             services.AddControllers();
