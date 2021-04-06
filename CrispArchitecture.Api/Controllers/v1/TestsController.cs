@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Test;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities;
@@ -51,9 +52,8 @@ namespace CrispArchitecture.Api.Controllers.v1
 
             await _unitOfWork.TestRepository.PostAsync(test);
             await _unitOfWork.SaveAsync();
-            
-            string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            string locationUri = baseUrl + Request.Path.Value + "/" + test.Id;
+
+            string locationUri = new LocationUri().GetLocationUri(HttpContext.Request, test.Id.ToString());
 
             var testResponse = _mapper.Map<TestResponseDto>(test);
 
