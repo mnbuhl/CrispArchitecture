@@ -20,6 +20,7 @@ namespace CrispArchitecture.Data.Repository
         {
             var order = await _context.Orders
                 .Include(o => o.LineItems)
+                .ThenInclude(li => li.Product)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -30,6 +31,7 @@ namespace CrispArchitecture.Data.Repository
         {
             return await _context.Orders
                 .Include(o => o.LineItems)
+                .ThenInclude(li => li.Product)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -53,9 +55,6 @@ namespace CrispArchitecture.Data.Repository
 
             if (order == null)
                 return;
-
-            if (order.LineItems != null)
-                _context.LineItems.RemoveRange(order.LineItems);
 
             _context.Orders.Remove(order);
         }
