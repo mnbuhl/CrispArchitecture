@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using CrispArchitecture.Application.Contracts.v1.Users;
 using CrispArchitecture.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace CrispArchitecture.Api.Controllers.v1
     public class AccountController : ControllerBase
     {
         private readonly IIdentityService _identityService;
+        private readonly IMapper _mapper;
 
-        public AccountController(IIdentityService identityService)
+        public AccountController(IIdentityService identityService, IMapper mapper)
         {
             _identityService = identityService;
+            _mapper = mapper;
         }
 
         [Authorize]
@@ -32,7 +35,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         public async Task<IActionResult> GetUserAddress()
         {
             var userAddress = await _identityService.GetUserAddress(HttpContext.User);
-            return Ok(userAddress);
+            return Ok(_mapper.Map<AddressResponseDto>(userAddress));
         }
 
         [HttpPost("login")]
