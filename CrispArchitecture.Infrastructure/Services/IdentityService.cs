@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Contracts.v1.Users;
@@ -6,7 +5,7 @@ using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace CrispArchitecture.Infrastructure.Identity.Services
+namespace CrispArchitecture.Infrastructure.Services
 {
     public class IdentityService : IIdentityService
     {
@@ -59,6 +58,11 @@ namespace CrispArchitecture.Infrastructure.Identity.Services
                 Token = "This will be a JWT token",
                 DisplayName = user.DisplayName
             };
+        }
+
+        private string CreateToken(AppUser user)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

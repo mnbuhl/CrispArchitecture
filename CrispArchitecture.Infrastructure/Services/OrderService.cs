@@ -8,7 +8,7 @@ using CrispArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace CrispArchitecture.Infrastructure.Data.Services
+namespace CrispArchitecture.Infrastructure.Services
 {
     public class OrderService : IOrderService
     {
