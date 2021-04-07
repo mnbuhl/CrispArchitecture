@@ -16,4 +16,3 @@ Project is still being updated.
 - [ ] Custom Error Handling
 - [ ] Pagination
 - [ ] Caching?
-- [ ] MediatR & CQRS?

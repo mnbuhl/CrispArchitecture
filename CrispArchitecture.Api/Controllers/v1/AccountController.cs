@@ -1,9 +1,7 @@
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CrispArchitecture.Application.Contracts.v1.Users;
 using CrispArchitecture.Application.Interfaces;
-using CrispArchitecture.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
