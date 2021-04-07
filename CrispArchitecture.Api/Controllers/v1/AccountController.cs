@@ -23,11 +23,16 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetCurrentLoggedInUser()
         {
-            string email = HttpContext.User?.FindFirstValue(ClaimTypes.Email);
-
-            var currentUser = await _identityService.GetCurrentUser(email);
-
+            var currentUser = await _identityService.GetCurrentUser(HttpContext.User);
             return Ok(currentUser);
+        }
+
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<IActionResult> GetUserAddress()
+        {
+            var userAddress = await _identityService.GetUserAddress(HttpContext.User);
+            return Ok(userAddress);
         }
 
         [HttpPost("login")]

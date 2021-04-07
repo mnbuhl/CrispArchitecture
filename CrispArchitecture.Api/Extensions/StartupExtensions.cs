@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace CrispArchitecture.Api
+namespace CrispArchitecture.Api.Extensions
 {
     // Class for configuring all services for the API, so the Startup class doesn't get too big. 
     public static class StartupExtensions

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Contracts.v1.Users;
+using CrispArchitecture.Application.Extensions;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -30,9 +31,9 @@ namespace CrispArchitecture.Infrastructure.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
         }
 
-        public async Task<AuthResponseDto> GetCurrentUser(string email)
+        public async Task<AuthResponseDto> GetCurrentUser(ClaimsPrincipal appUser)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByClaimsPrinciple(appUser);
 
             if (user == null)
                 return new AuthResponseDto { Errors = new[] { "User not found" } };
@@ -43,6 +44,13 @@ namespace CrispArchitecture.Infrastructure.Services
                 Token = CreateToken(user),
                 DisplayName = user.DisplayName
             };
+        }
+
+        public async Task<Address> GetUserAddress(ClaimsPrincipal appUser)
+        {
+            var user = await _userManager.FindByClaimsPrincipleWithAddressAsync(appUser);
+
+            return user.Address;
         }
 
         public async Task<AuthResponseDto> Login(string email, string password)
