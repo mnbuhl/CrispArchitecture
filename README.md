@@ -12,6 +12,7 @@ Project is still being updated.
 - [ ] Authentication / Authorization
 - [ ] Unit Tests
 - [ ] Logging
+- [ ] Proper documentation
 - [ ] Custom Error Handling
 - [ ] Pagination
 - [ ] Caching?

@@ -20,7 +20,7 @@ namespace CrispArchitecture.Api
         {
             services.ConfigureDataStorage(_configuration);
             services.ConfigureAppServices();
-            services.ConfigureIdentityServices();
+            services.ConfigureIdentityServices(_configuration);
             services.ConfigureVersioning();
             services.ConfigureAutoMapper();
             services.ConfigureSwagger();
@@ -41,7 +41,8 @@ namespace CrispArchitecture.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

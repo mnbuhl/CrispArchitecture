@@ -6,6 +6,7 @@ using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrispArchitecture.Api.Controllers.v1
@@ -43,6 +44,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody]CustomerCommandDto customerRequest)
         {
             if (!ModelState.IsValid)
@@ -62,6 +64,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpPut("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> Update(Guid id, [FromBody] CustomerCommandDto customerRequest)
         {
             if (!ModelState.IsValid)
@@ -83,6 +86,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpDelete("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool deleted = await _customerService.DeleteCustomerAsync(id);

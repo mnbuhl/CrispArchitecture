@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace CrispArchitecture.Application.Contracts.v1.Users
 {
     public class RegisterCommandDto
     {
-        [RegularExpression("^[a-zA-Z0-9 ]*$")]
+        [RegularExpression("^[a-zA-Z0-9æøå ]*$")]
         public string DisplayName { get; set; }
 
         [EmailAddress]

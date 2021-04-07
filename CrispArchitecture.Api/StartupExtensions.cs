@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities.Identity;
@@ -5,11 +7,13 @@ using CrispArchitecture.Infrastructure.Data;
 using CrispArchitecture.Infrastructure.Data.Repository;
 using CrispArchitecture.Infrastructure.Identity;
 using CrispArchitecture.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CrispArchitecture.Api
@@ -29,20 +33,31 @@ namespace CrispArchitecture.Api
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"),
-                    opt => 
+                    opt =>
                         opt.MigrationsAssembly("CrispArchitecture.Infrastructure"));
             });
         }
 
-        public static void ConfigureIdentityServices(this IServiceCollection services)
+        public static void ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
             var builder = services.AddIdentityCore<AppUser>();
 
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddEntityFrameworkStores<AppIdentityDbContext>();
             builder.AddSignInManager<SignInManager<AppUser>>();
-            
-            services.AddAuthentication();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Key"])),
+                        ValidIssuer = configuration["Token:Issuer"],
+                        ValidateIssuer = true,
+                        ValidateAudience = false
+                    };
+                });
         }
 
         public static void ConfigureAppServices(this IServiceCollection services)
@@ -78,7 +93,29 @@ namespace CrispArchitecture.Api
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CrispArchitecture.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CrispArchitecture API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        ArraySegment<string>.Empty
+                    }
+                });
             });
         }
     }
