@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Domain.Entities;
 
-namespace CrispArchitecture.Data.Services
+namespace CrispArchitecture.Infrastructure.Services
 {
     public class ProductService : IProductService
     {

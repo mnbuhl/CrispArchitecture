@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrispArchitecture.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Domain", "CrispArchitecture.Domain\CrispArchitecture.Domain.csproj", "{5F218BEF-6C9F-4019-81B1-F789291406C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Data", "CrispArchitecture.Data\CrispArchitecture.Data.csproj", "{82066207-F193-4B12-820D-F1E62609209C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrispArchitecture.Infrastructure", "CrispArchitecture.Infrastructure\CrispArchitecture.Infrastructure.csproj", "{82066207-F193-4B12-820D-F1E62609209C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0B74CB2-BEAE-40A5-BB89-2753A52DCA58}"
 	ProjectSection(SolutionItems) = preProject

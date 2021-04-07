@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CrispArchitecture.Data.Migrations
+namespace CrispArchitecture.Infrastructure.Migrations
 {
     public partial class AddedTestOwnerEntity : Migration
     {

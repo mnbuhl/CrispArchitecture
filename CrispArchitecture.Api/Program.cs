@@ -1,5 +1,5 @@
 using System;
-using CrispArchitecture.Data;
+using CrispArchitecture.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

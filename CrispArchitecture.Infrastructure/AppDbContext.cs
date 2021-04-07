@@ -1,7 +1,7 @@
 ﻿using CrispArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrispArchitecture.Data
+namespace CrispArchitecture.Infrastructure
 {
     public class AppDbContext : DbContext
     {
