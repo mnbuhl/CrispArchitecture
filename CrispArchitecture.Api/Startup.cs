@@ -19,7 +19,8 @@ namespace CrispArchitecture.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureDataStorage(_configuration);
-            services.ConfigureInstances();
+            services.ConfigureAppServices();
+            services.ConfigureIdentityServices();
             services.ConfigureVersioning();
             services.ConfigureAutoMapper();
             services.ConfigureSwagger();

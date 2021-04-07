@@ -1,9 +1,11 @@
 using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Domain.Entities.Identity;
 using CrispArchitecture.Infrastructure.Data;
 using CrispArchitecture.Infrastructure.Data.Repository;
 using CrispArchitecture.Infrastructure.Data.Services;
 using CrispArchitecture.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using Microsoft.OpenApi.Models;
 
 namespace CrispArchitecture.Api
 {
+    // Class for configuring all services for the API, so the Startup class doesn't get too big. 
     public static class StartupExtensions
     {
         public static void ConfigureDataStorage(this IServiceCollection services, IConfiguration configuration)
@@ -31,7 +34,18 @@ namespace CrispArchitecture.Api
             });
         }
 
-        public static void ConfigureInstances(this IServiceCollection services)
+        public static void ConfigureIdentityServices(this IServiceCollection services)
+        {
+            var builder = services.AddIdentityCore<AppUser>();
+
+            builder = new IdentityBuilder(builder.UserType, builder.Services);
+            builder.AddEntityFrameworkStores<AppIdentityDbContext>();
+            builder.AddSignInManager<SignInManager<AppUser>>();
+            
+            services.AddAuthentication();
+        }
+
+        public static void ConfigureAppServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IOrderService, OrderService>();

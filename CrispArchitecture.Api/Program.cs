@@ -1,6 +1,10 @@
 using System;
+using System.Threading.Tasks;
+using CrispArchitecture.Domain.Entities.Identity;
 using CrispArchitecture.Infrastructure.Data;
+using CrispArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -9,7 +13,7 @@ namespace CrispArchitecture.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -20,7 +24,10 @@ namespace CrispArchitecture.Api
                 try
                 {
                     var context = services.GetRequiredService<AppDbContext>();
-                    SeedData.SeedDatabase(context).Wait();
+                    await SeedData.SeedDatabase(context);
+
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    await AppIdentitySeedData.SeedUsersAsync(userManager);
                 }
                 catch (Exception e)
                 {
