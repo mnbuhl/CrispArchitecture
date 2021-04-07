@@ -11,5 +11,6 @@ namespace CrispArchitecture.Application.Interfaces
         Task<Address> GetUserAddress(ClaimsPrincipal appUser);
         Task<AuthResponseDto> Login(string email, string password);
         Task<AuthResponseDto> Register(string displayName, string email, string password);
+        Task<bool> UpdateUserAddress(ClaimsPrincipal appUser, Address addressToUpdate);
     }
 }

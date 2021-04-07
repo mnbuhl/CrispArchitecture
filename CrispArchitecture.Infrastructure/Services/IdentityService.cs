@@ -95,6 +95,17 @@ namespace CrispArchitecture.Infrastructure.Services
             };
         }
 
+        public async Task<bool> UpdateUserAddress(ClaimsPrincipal appUser, Address addressToUpdate)
+        {
+            var user = await _userManager.FindByClaimsPrincipleWithAddressAsync(appUser);
+
+            user.Address = addressToUpdate;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
+        }
+
         private string CreateToken(AppUser user)
         {
             var claims = new List<Claim>

@@ -7,7 +7,7 @@ namespace CrispArchitecture.Application.Contracts.v1.Users
     {
         public MappingProfile()
         {
-            CreateMap<Address, AddressResponseDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
     }
 }

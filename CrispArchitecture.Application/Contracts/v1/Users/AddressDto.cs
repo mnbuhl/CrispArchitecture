@@ -1,6 +1,6 @@
 namespace CrispArchitecture.Application.Contracts.v1.Users
 {
-    public class AddressResponseDto
+    public class AddressDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

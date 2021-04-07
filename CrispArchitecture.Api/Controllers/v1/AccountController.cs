@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CrispArchitecture.Application.Contracts.v1.Users;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetCurrentLoggedInUser()
         {
-            var currentUser = await _identityService.GetCurrentUser(HttpContext.User);
+            var currentUser = await _identityService.GetCurrentUser(User);
             return Ok(currentUser);
         }
 
@@ -34,8 +35,8 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet("address")]
         public async Task<IActionResult> GetUserAddress()
         {
-            var userAddress = await _identityService.GetUserAddress(HttpContext.User);
-            return Ok(_mapper.Map<AddressResponseDto>(userAddress));
+            var userAddress = await _identityService.GetUserAddress(User);
+            return Ok(_mapper.Map<AddressDto>(userAddress));
         }
 
         [HttpPost("login")]
@@ -59,6 +60,20 @@ namespace CrispArchitecture.Api.Controllers.v1
                 return BadRequest(authResponse.Errors);
 
             return Ok(authResponse);
+        }
+
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<IActionResult> UpdateUserAddress([FromBody] AddressDto addressRequest)
+        {
+            var addressToUpdate = await _identityService.GetUserAddress(User);
+            _mapper.Map(addressRequest, addressToUpdate);
+            bool success = await _identityService.UpdateUserAddress(User, addressToUpdate);
+
+            if (!success)
+                return BadRequest();
+
+            return Ok(_mapper.Map<AddressDto>(addressToUpdate));
         }
     }
 }
