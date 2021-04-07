@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CrispArchitecture.Infrastructure.Migrations
+namespace CrispArchitecture.Infrastructure.Data.Migrations
 {
     public partial class UpdatingEntityModelToMakeMoreSense : Migration
     {

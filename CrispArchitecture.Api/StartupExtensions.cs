@@ -1,8 +1,9 @@
 using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Infrastructure;
-using CrispArchitecture.Infrastructure.Repository;
-using CrispArchitecture.Infrastructure.Services;
+using CrispArchitecture.Infrastructure.Data;
+using CrispArchitecture.Infrastructure.Data.Repository;
+using CrispArchitecture.Infrastructure.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

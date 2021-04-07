@@ -8,7 +8,7 @@ using CrispArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace CrispArchitecture.Infrastructure.Repository
+namespace CrispArchitecture.Infrastructure.Data.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CrispArchitecture.Domain.Entities;
 
-namespace CrispArchitecture.Infrastructure
+namespace CrispArchitecture.Infrastructure.Data
 {
     public class SeedData
     {
