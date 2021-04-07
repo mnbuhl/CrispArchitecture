@@ -8,39 +8,39 @@ namespace CrispArchitecture.Data.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<Product> _productRepository;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IGenericRepository<Product> productRepository)
         {
-            _unitOfWork = unitOfWork;
+            _productRepository = productRepository;
         }
 
         public async Task<Product> GetProductAsync(Guid id)
         {
-            return await _unitOfWork.ProductRepository.GetAsync(p => p.Id == id);
+            return await _productRepository.GetAsync(p => p.Id == id);
         }
 
         public async Task<IList<Product>> GetAllProductsAsync()
         {
-            return await _unitOfWork.ProductRepository.GetAllAsync();
+            return await _productRepository.GetAllAsync();
         }
 
         public async Task<bool> CreateProductAsync(Product product)
         {
-            await _unitOfWork.ProductRepository.CreateAsync(product);
-            return await _unitOfWork.SaveAsync() > 0;
+            await _productRepository.CreateAsync(product);
+            return await _productRepository.SaveAsync();
         }
 
         public async Task<bool> UpdateProductAsync(Product product)
         {
-            _unitOfWork.ProductRepository.Update(product);
-            return await _unitOfWork.SaveAsync() > 0;
+            _productRepository.Update(product);
+            return await _productRepository.SaveAsync();
         }
 
         public async Task<bool> DeleteProductAsync(Guid id)
         {
-            await _unitOfWork.ProductRepository.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync() > 0;
+            await _productRepository.DeleteAsync(id);
+            return await _productRepository.SaveAsync();
         }
     }
 }

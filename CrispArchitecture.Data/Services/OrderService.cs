@@ -12,11 +12,13 @@ namespace CrispArchitecture.Data.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<Order> _orderRepository;
+        private readonly IGenericRepository<Product> _productRepository;
 
-        public OrderService(IUnitOfWork unitOfWork)
+        public OrderService(IGenericRepository<Order> orderRepository, IGenericRepository<Product> productRepository)
         {
-            _unitOfWork = unitOfWork;
+            _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<Order> GetOrderAsync(Guid id)
@@ -27,35 +29,34 @@ namespace CrispArchitecture.Data.Services
             IIncludableQueryable<Order, object> Includes(IQueryable<Order> x) =>
                 x.Include(o => o.LineItems).ThenInclude(li => li.Product);
 
-            var order = await _unitOfWork.OrderRepository.GetAsync(predicate, Includes);
+            var order = await _orderRepository.GetAsync(predicate, Includes);
 
             return order;
         }
 
         public async Task<IList<Order>> GetAllOrdersAsync()
         {
-            IList<Order> orders = await _unitOfWork.OrderRepository.GetAllAsync();
-            return orders;
+            return await _orderRepository.GetAllAsync();
         }
 
         public async Task<bool> CreateOrderAsync(Order order)
         {
             order.Total = await GetOrderTotal(order.LineItems);
-            await _unitOfWork.OrderRepository.CreateAsync(order);
-            return await _unitOfWork.SaveAsync() > 0;
+            await _orderRepository.CreateAsync(order);
+            return await _orderRepository.SaveAsync();
         }
 
         public async Task<bool> UpdateOrderAsync(Order order)
         {
             order.Total += await GetOrderTotal(order.LineItems);
-            _unitOfWork.OrderRepository.Update(order);
-            return await _unitOfWork.SaveAsync() > 0;
+            _orderRepository.Update(order);
+            return await _orderRepository.SaveAsync();
         }
 
         public async Task<bool> DeleteOrderAsync(Guid id)
         {
-            await _unitOfWork.OrderRepository.DeleteAsync(id);
-            return await _unitOfWork.SaveAsync() > 0;
+            await _orderRepository.DeleteAsync(id);
+            return await _orderRepository.SaveAsync();
         }
         
         private async Task<double> GetOrderTotal(ICollection<LineItem> lineItems)
@@ -64,7 +65,7 @@ namespace CrispArchitecture.Data.Services
 
             foreach (var lineItem in lineItems)
             {
-                var product = await _unitOfWork.ProductRepository.GetAsync(x => x.Id == lineItem.ProductId);
+                var product = await _productRepository.GetAsync(x => x.Id == lineItem.ProductId);
 
                 total += product.Price * lineItem.Amount;
             }

@@ -75,5 +75,10 @@ namespace CrispArchitecture.Data.Repository
 
             _context.Set<T>().Remove(entity);
         }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

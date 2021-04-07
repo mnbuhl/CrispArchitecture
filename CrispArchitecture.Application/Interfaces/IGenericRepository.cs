@@ -18,5 +18,6 @@ namespace CrispArchitecture.Application.Interfaces
         Task CreateAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(Guid id);
+        Task<bool> SaveAsync();
     }
 }
