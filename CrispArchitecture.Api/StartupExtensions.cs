@@ -5,6 +5,7 @@ using CrispArchitecture.Infrastructure.Data;
 using CrispArchitecture.Infrastructure.Data.Repository;
 using CrispArchitecture.Infrastructure.Data.Services;
 using CrispArchitecture.Infrastructure.Identity;
+using CrispArchitecture.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,7 @@ namespace CrispArchitecture.Api
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IIdentityService, IdentityService>();
         }
 
         public static void ConfigureAutoMapper(this IServiceCollection services)
