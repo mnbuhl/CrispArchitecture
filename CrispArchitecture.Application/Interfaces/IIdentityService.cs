@@ -7,5 +7,6 @@ namespace CrispArchitecture.Application.Interfaces
     {
         Task<AuthResponseDto> Login(string email, string password);
         Task<AuthResponseDto> Register(string displayName, string email, string password);
+        Task<AuthResponseDto> GetCurrentUser(string email);
     }
 }

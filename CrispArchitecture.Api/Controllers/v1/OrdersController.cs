@@ -43,8 +43,8 @@ namespace CrispArchitecture.Api.Controllers.v1
             return Ok(_mapper.Map<List<OrderResponseDto>>(orders));
         }
         
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] OrderCommandDto orderRequest)
         {
             if (!ModelState.IsValid)
@@ -63,8 +63,8 @@ namespace CrispArchitecture.Api.Controllers.v1
             return Created(locationUri, orderResponse);
         }
         
-        [HttpPut("{id:Guid}")]
         [Authorize]
+        [HttpPut("{id:Guid}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] OrderCommandDto orderRequest)
         {
             if (!ModelState.IsValid)
@@ -85,8 +85,8 @@ namespace CrispArchitecture.Api.Controllers.v1
             return NoContent();
         }
         
-        [HttpDelete("{id:Guid}")]
         [Authorize]
+        [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool deleted = await _orderService.DeleteOrderAsync(id);

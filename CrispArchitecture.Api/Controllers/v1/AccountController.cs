@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Contracts.v1.Users;
 using CrispArchitecture.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrispArchitecture.Api.Controllers.v1
@@ -15,6 +17,17 @@ namespace CrispArchitecture.Api.Controllers.v1
         public AccountController(IIdentityService identityService)
         {
             _identityService = identityService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentLoggedInUser()
+        {
+            string email = HttpContext.User?.FindFirstValue(ClaimTypes.Email);
+
+            var currentUser = await _identityService.GetCurrentUser(email);
+
+            return Ok(currentUser);
         }
 
         [HttpPost("login")]

@@ -30,6 +30,21 @@ namespace CrispArchitecture.Infrastructure.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
         }
 
+        public async Task<AuthResponseDto> GetCurrentUser(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                return new AuthResponseDto { Errors = new[] { "User not found" } };
+
+            return new AuthResponseDto
+            {
+                Email = user.Email,
+                Token = CreateToken(user),
+                DisplayName = user.DisplayName
+            };
+        }
+
         public async Task<AuthResponseDto> Login(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
