@@ -9,7 +9,7 @@ Project is still being updated.
 - [x] Create Controller & Service logic
 - [x] Implement Generic Repository
 - [x] Versioning
-- [ ] Authentication / Authorization
+- [x] Authentication / Authorization
 - [ ] Unit Tests
 - [ ] Logging
 - [ ] Proper documentation
