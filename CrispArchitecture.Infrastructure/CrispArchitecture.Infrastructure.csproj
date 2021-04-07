@@ -21,8 +21,4 @@
     <ProjectReference Include="..\CrispArchitecture.Domain\CrispArchitecture.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Identity" />
-  </ItemGroup>
-
 </Project>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace CrispArchitecture.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    public class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -19,130 +19,124 @@ namespace CrispArchitecture.Infrastructure.Data.Migrations
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.Customer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Email")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Phone")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Customers");
-                });
+                b.ToTable("Customers");
+            });
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.LineItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                b.Property<int>("Amount")
+                    .HasColumnType("int");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("OrderId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                b.HasIndex("ProductId");
 
-                    b.ToTable("LineItems");
-                });
+                b.ToTable("LineItems");
+            });
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                b.Property<Guid>("CustomerId")
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsPaid")
+                    .HasColumnType("bit");
 
-                    b.Property<double>("Total")
-                        .HasColumnType("float");
+                b.Property<double>("Total")
+                    .HasColumnType("float");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
-                });
+                b.ToTable("Orders");
+            });
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                b.Property<double>("Price")
+                    .HasColumnType("float");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Products");
-                });
+                b.ToTable("Products");
+            });
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.LineItem", b =>
-                {
-                    b.HasOne("CrispArchitecture.Domain.Entities.Order", "Order")
-                        .WithMany("LineItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("CrispArchitecture.Domain.Entities.Order", "Order")
+                    .WithMany("LineItems")
+                    .HasForeignKey("OrderId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("CrispArchitecture.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("CrispArchitecture.Domain.Entities.Product", "Product")
+                    .WithMany()
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Order");
+                b.Navigation("Order");
 
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("CrispArchitecture.Domain.Entities.Order", b =>
-                {
-                    b.HasOne("CrispArchitecture.Domain.Entities.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("CrispArchitecture.Domain.Entities.Customer", b =>
-                {
-                    b.Navigation("Orders");
-                });
+                b.Navigation("Product");
+            });
 
             modelBuilder.Entity("CrispArchitecture.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("LineItems");
-                });
+            {
+                b.HasOne("CrispArchitecture.Domain.Entities.Customer", "Customer")
+                    .WithMany("Orders")
+                    .HasForeignKey("CustomerId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Customer");
+            });
+
+            modelBuilder.Entity("CrispArchitecture.Domain.Entities.Customer", b => { b.Navigation("Orders"); });
+
+            modelBuilder.Entity("CrispArchitecture.Domain.Entities.Order", b => { b.Navigation("LineItems"); });
 #pragma warning restore 612, 618
         }
     }

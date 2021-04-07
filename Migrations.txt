@@ -1,5 +1,6 @@
-dotnet ef migrations add InitialCreate -s CrispArchitecture.Api -p CrispArchitecture.Data
-dotnet ef migrations add AddedTestOwnerEntity -s CrispArchitecture.Api -p CrispArchitecture.Data
-dotnet ef migrations add UpdatingEntityModelToMakeMoreSense -s CrispArchitecture.Api -p CrispArchitecture.Data
-dotnet ef migrations add ConfiguredCascadingDeleteOnOrder -s CrispArchitecture.Api -p CrispArchitecture.Data
-dotnet ef migrations add RemovedOriginalEntitiesFromProject -s CrispArchitecture.Api -p CrispArchitecture.Data
+dotnet ef migrations add InitialCreate -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext -o Data/Migrations
+dotnet ef migrations add AddedTestOwnerEntity -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
+dotnet ef migrations add UpdatingEntityModelToMakeMoreSense -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
+dotnet ef migrations add ConfiguredCascadingDeleteOnOrder -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
+dotnet ef migrations add RemovedOriginalEntitiesFromProject -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
+dotnet ef migrations add InitialIdentityCreate -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppIdentityDbContext -o Identity/Migrations

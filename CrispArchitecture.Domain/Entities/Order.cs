@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrispArchitecture.Domain.Entities
@@ -13,6 +12,7 @@ namespace CrispArchitecture.Domain.Entities
         public bool IsPaid { get; set; }
 
         public Guid CustomerId { get; set; }
+
         [ForeignKey(nameof(CustomerId))]
         public Customer Customer { get; set; }
     }

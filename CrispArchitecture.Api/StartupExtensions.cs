@@ -1,9 +1,9 @@
 using CrispArchitecture.Application.Contracts.v1.Customers;
 using CrispArchitecture.Application.Interfaces;
-using CrispArchitecture.Infrastructure;
 using CrispArchitecture.Infrastructure.Data;
 using CrispArchitecture.Infrastructure.Data.Repository;
 using CrispArchitecture.Infrastructure.Data.Services;
+using CrispArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +17,18 @@ namespace CrispArchitecture.Api
         public static void ConfigureDataStorage(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
+            {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    opt => opt.MigrationsAssembly("CrispArchitecture.InfrastructureInfrastructure")));
+                    opt =>
+                        opt.MigrationsAssembly("CrispArchitecture.Infrastructure"));
+            });
+
+            services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"),
+                    opt => 
+                        opt.MigrationsAssembly("CrispArchitecture.Infrastructure"));
+            });
         }
 
         public static void ConfigureInstances(this IServiceCollection services)

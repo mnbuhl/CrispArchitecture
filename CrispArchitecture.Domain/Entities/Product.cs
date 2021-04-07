@@ -1,6 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace CrispArchitecture.Domain.Entities
 {
     public class Product : BaseEntity

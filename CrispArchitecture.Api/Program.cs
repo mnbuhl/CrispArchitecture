@@ -1,5 +1,4 @@
 using System;
-using CrispArchitecture.Infrastructure;
 using CrispArchitecture.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,7 @@ namespace CrispArchitecture.Api
                     logger.LogError(e, "An error occured seeding the Database");
                 }
             }
-            
+
             host.Run();
         }
 
