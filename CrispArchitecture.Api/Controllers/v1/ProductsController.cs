@@ -5,6 +5,7 @@ using AutoMapper;
 using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Products;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Application.Specifications;
 using CrispArchitecture.Application.Specifications.Products;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -36,12 +37,19 @@ namespace CrispArchitecture.Api.Controllers.v1
 
             return Ok(_mapper.Map<ProductResponseDto>(product));
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string sort)
+        public async Task<IActionResult> GetAll([FromQuery] SpecificationParams parameters)
         {
-            IList<Product> products = await _productRepository.GetAllAsync(new ProductsSpecification(sort));
-            return Ok(_mapper.Map<List<ProductResponseDto>>(products));
+            int totalItems = await _productRepository.CountAsync();
+            IList<Product> products = await _productRepository.GetAllAsync(new ProductsSpecification(parameters));
+            
+            var data = _mapper.Map<List<ProductResponseDto>>(products);
+            
+            var paginationResult =
+                new Pagination<ProductResponseDto>(parameters.PageIndex, parameters.PageSize, totalItems, data);
+            
+            return Ok(paginationResult);
         }
         
         [Authorize]

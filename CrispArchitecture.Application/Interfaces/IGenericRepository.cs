@@ -13,5 +13,7 @@ namespace CrispArchitecture.Application.Interfaces
         Task<bool> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(Guid id);
+        Task<int> CountAsync();
+        Task<int> CountAsync(ISpecification<T> specification);
     }
 }

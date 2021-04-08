@@ -1,13 +1,14 @@
-using System;
 using CrispArchitecture.Domain.Entities;
 
 namespace CrispArchitecture.Application.Specifications.Orders
 {
     public class OrdersSpecification : BaseSpecification<Order>
     {
-        public OrdersSpecification(string sort)
+        public OrdersSpecification(SpecificationParams parameters)
         {
-            switch (sort)
+            ApplyPaging(parameters.PageSize * (parameters.PageIndex - 1), parameters.PageSize);
+            
+            switch (parameters.Sort)
             {
                 case "totalAsc":
                     AddOrderBy(x => x.Total);

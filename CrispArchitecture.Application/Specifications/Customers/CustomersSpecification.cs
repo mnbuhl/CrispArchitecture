@@ -1,13 +1,14 @@
-using System;
 using CrispArchitecture.Domain.Entities;
 
 namespace CrispArchitecture.Application.Specifications.Customers
 {
     public class CustomersSpecification : BaseSpecification<Customer>
     {
-        public CustomersSpecification(string sort)
+        public CustomersSpecification(SpecificationParams parameters)
         {
-            switch (sort)
+            ApplyPaging(parameters.PageSize * (parameters.PageIndex - 1), parameters.PageSize);
+            
+            switch (parameters.Sort)
             {
                 case "id":
                     AddOrderBy(x => x.Id);

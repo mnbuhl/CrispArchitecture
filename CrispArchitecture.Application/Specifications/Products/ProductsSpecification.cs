@@ -5,9 +5,11 @@ namespace CrispArchitecture.Application.Specifications.Products
 {
     public class ProductsSpecification : BaseSpecification<Product>
     {
-        public ProductsSpecification(string sort)
+        public ProductsSpecification(SpecificationParams parameters)
         {
-            switch (sort)
+            ApplyPaging(parameters.PageSize * (parameters.PageIndex - 1), parameters.PageSize);
+            
+            switch (parameters.Sort)
             {
                 case "priceAsc":
                     AddOrderBy(x => x.Price);

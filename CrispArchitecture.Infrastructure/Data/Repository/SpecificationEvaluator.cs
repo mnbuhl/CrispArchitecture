@@ -16,11 +16,6 @@ namespace CrispArchitecture.Infrastructure.Data.Repository
                 query = query.Where(specification.Criteria);
             }
 
-            if (specification.Includes != null)
-            {
-                query = specification.Includes(query);
-            }
-
             if (specification.OrderBy != null)
             {
                 query = query.OrderBy(specification.OrderBy);
@@ -29,6 +24,16 @@ namespace CrispArchitecture.Infrastructure.Data.Repository
             if (specification.OrderByDescending != null)
             {
                 query = query.OrderByDescending(specification.OrderByDescending);
+            }
+
+            if (specification.IsPagingEnabled)
+            {
+                query = query.Skip(specification.Skip).Take(specification.Take);
+            }
+
+            if (specification.Includes != null)
+            {
+                query = specification.Includes(query);
             }
 
             return query;

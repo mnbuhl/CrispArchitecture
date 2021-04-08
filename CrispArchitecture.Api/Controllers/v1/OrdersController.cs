@@ -5,6 +5,7 @@ using AutoMapper;
 using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Orders;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Application.Specifications;
 using CrispArchitecture.Application.Specifications.Orders;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -40,10 +41,17 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string sort)
+        public async Task<IActionResult> GetAll([FromQuery] SpecificationParams parameters)
         {
-            IList<Order> orders = await _orderRepository.GetAllAsync(new OrdersSpecification(sort));
-            return Ok(_mapper.Map<List<OrderResponseDto>>(orders));
+            int totalItems = await _orderRepository.CountAsync();
+            IList<Order> orders = await _orderRepository.GetAllAsync(new OrdersWithLineItemsAndProductsSpecification(parameters));
+            
+            var data = _mapper.Map<List<OrderResponseDto>>(orders);
+            
+            var paginationResult =
+                new Pagination<OrderResponseDto>(parameters.PageIndex, parameters.PageSize, totalItems, data);
+            
+            return Ok(paginationResult);
         }
         
         [Authorize]

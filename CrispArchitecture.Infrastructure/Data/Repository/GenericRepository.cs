@@ -50,6 +50,16 @@ namespace CrispArchitecture.Infrastructure.Data.Repository
             _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync() > 0;
         }
+        
+        public async Task<int> CountAsync()
+        {
+            return await _context.Set<T>().CountAsync();
+        }
+
+        public async Task<int> CountAsync(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).CountAsync();
+        }
 
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {
