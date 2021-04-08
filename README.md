@@ -10,9 +10,9 @@ Project is still being updated.
 - [x] Implement Generic Repository & Specification Pattern
 - [x] Versioning
 - [x] Authentication / Authorization
+- [x] Pagination
 - [ ] Unit Tests
 - [ ] Logging
 - [ ] Proper documentation
 - [ ] Custom Error Handling
-- [ ] Pagination
 - [ ] Caching?
