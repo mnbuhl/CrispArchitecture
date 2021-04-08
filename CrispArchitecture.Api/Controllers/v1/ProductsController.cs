@@ -5,6 +5,7 @@ using AutoMapper;
 using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Products;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Application.Specifications.Products;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,19 @@ namespace CrispArchitecture.Api.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IGenericRepository<Product> _productRepository;
         private readonly IMapper _mapper;
 
-        public ProductsController(IProductService productService, IMapper mapper)
+        public ProductsController(IGenericRepository<Product> productRepository, IMapper mapper)
         {
-            _productService = productService;
+            _productRepository = productRepository;
             _mapper = mapper;
         }
         
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var product = await _productService.GetProductAsync(id);
+            var product = await _productRepository.GetAsync(new ProductsSpecification(id));
 
             if (product == null)
                 return NotFound();
@@ -39,7 +40,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            IList<Product> products = await _productService.GetAllProductsAsync();
+            IList<Product> products = await _productRepository.GetAllAsync(new ProductsSpecification());
             return Ok(_mapper.Map<List<ProductResponseDto>>(products));
         }
         
@@ -52,7 +53,7 @@ namespace CrispArchitecture.Api.Controllers.v1
 
             var product = _mapper.Map<Product>(productRequest);
 
-            bool created = await _productService.CreateProductAsync(product);
+            bool created = await _productRepository.CreateAsync(product);
 
             if (!created)
                 return BadRequest();
@@ -70,14 +71,14 @@ namespace CrispArchitecture.Api.Controllers.v1
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var productToUpdate = await _productService.GetProductAsync(id);
+            var productToUpdate = await _productRepository.GetAsync(new ProductsSpecification(id));
 
             if (productToUpdate == null)
                 return NotFound();
 
             _mapper.Map(productRequest, productToUpdate);
 
-            bool updated = await _productService.UpdateProductAsync(productToUpdate);
+            bool updated = await _productRepository.UpdateAsync(productToUpdate);
 
             if (!updated)
                 return NotFound();
@@ -89,7 +90,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _productService.DeleteProductAsync(id);
+            bool deleted = await _productRepository.DeleteAsync(id);
 
             if (!deleted)
                 return NotFound();

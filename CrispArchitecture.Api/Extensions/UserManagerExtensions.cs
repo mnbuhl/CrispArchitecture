@@ -4,7 +4,7 @@ using CrispArchitecture.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrispArchitecture.Application.Extensions
+namespace CrispArchitecture.Api.Extensions
 {
     public static class UserManagerExtensions
     {

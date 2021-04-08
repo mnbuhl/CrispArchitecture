@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Application.Specifications;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace CrispArchitecture.Infrastructure.Data.Repository
 {
@@ -19,66 +18,42 @@ namespace CrispArchitecture.Infrastructure.Data.Repository
             _context = context;
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<T> GetAsync(ISpecification<T> specification)
         {
-            IQueryable<T> query = _context.Set<T>();
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            return await query.AsNoTracking().FirstOrDefaultAsync(predicate);
+            return await ApplySpecification(specification).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<IList<T>> GetAllAsync(ISpecification<T> specification)
         {
-            IQueryable<T> query = _context.Set<T>();
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-
-            return await query.AsNoTracking().ToListAsync();
+            return await ApplySpecification(specification).AsNoTracking().ToListAsync();
         }
 
-        public async Task CreateAsync(T entity)
+        public async Task<bool> CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public void Update(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
 
             if (entity == null)
-                return;
+                return false;
 
             _context.Set<T>().Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SaveAsync()
+        private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {
-            return await _context.SaveChangesAsync() > 0;
+            return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), specification);
         }
     }
 }

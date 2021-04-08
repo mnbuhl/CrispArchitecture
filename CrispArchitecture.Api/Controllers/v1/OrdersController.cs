@@ -5,6 +5,7 @@ using AutoMapper;
 using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Orders;
 using CrispArchitecture.Application.Interfaces;
+using CrispArchitecture.Application.Specifications.Orders;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,21 @@ namespace CrispArchitecture.Api.Controllers.v1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderTotalService _orderTotalService;
+        private readonly IGenericRepository<Order> _orderRepository;
         private readonly IMapper _mapper;
 
-        public OrdersController(IMapper mapper, IOrderService orderService)
+        public OrdersController(IMapper mapper, IGenericRepository<Order> orderRepository, IOrderTotalService orderTotalService)
         {
             _mapper = mapper;
-            _orderService = orderService;
+            _orderRepository = orderRepository;
+            _orderTotalService = orderTotalService;
         }
         
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var order = await _orderService.GetOrderAsync(id);
+            var order = await _orderRepository.GetAsync(new OrdersWithLineItemsAndProductsSpecification(id));
 
             if (order == null)
                 return NotFound();
@@ -39,7 +42,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            IList<Order> orders = await _orderService.GetAllOrdersAsync();
+            IList<Order> orders = await _orderRepository.GetAllAsync(new OrdersSpecification());
             return Ok(_mapper.Map<List<OrderResponseDto>>(orders));
         }
         
@@ -51,8 +54,9 @@ namespace CrispArchitecture.Api.Controllers.v1
                 return BadRequest(ModelState);
         
             var order = _mapper.Map<Order>(orderRequest);
+            order.Total = await _orderTotalService.GetOrderTotal(order.LineItems);
 
-            bool created = await _orderService.CreateOrderAsync(order);
+            bool created = await _orderRepository.CreateAsync(order);
 
             if (!created)
                 return BadRequest();
@@ -70,14 +74,17 @@ namespace CrispArchitecture.Api.Controllers.v1
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
         
-            var orderToUpdate = await _orderService.GetOrderAsync(id);
-        
+            var orderToUpdate = await _orderRepository.GetAsync(new OrdersWithLineItemsAndProductsSpecification(id));
+
             if (orderToUpdate == null)
                 return NotFound();
+
+            orderToUpdate.Total =
+                await _orderTotalService.GetOrderTotalFromUpdate(orderToUpdate.LineItems, orderRequest.LineItems);
         
             _mapper.Map(orderRequest, orderToUpdate);
 
-            bool updated = await _orderService.UpdateOrderAsync(orderToUpdate);
+            bool updated = await _orderRepository.UpdateAsync(orderToUpdate);
 
             if (!updated)
                 return NotFound();
@@ -89,7 +96,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool deleted = await _orderService.DeleteOrderAsync(id);
+            bool deleted = await _orderRepository.DeleteAsync(id);
         
             if (!deleted)
                 return NotFound();

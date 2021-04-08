@@ -63,10 +63,8 @@ namespace CrispArchitecture.Api.Extensions
         public static void ConfigureAppServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IOrderTotalService, OrderTotalService>();
+            services.AddScoped<ITokenService, TokenService>();
         }
 
         public static void ConfigureAutoMapper(this IServiceCollection services)
