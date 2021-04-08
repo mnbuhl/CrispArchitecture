@@ -21,6 +21,16 @@ namespace CrispArchitecture.Infrastructure.Data.Repository
                 query = specification.Includes(query);
             }
 
+            if (specification.OrderBy != null)
+            {
+                query = query.OrderBy(specification.OrderBy);
+            }
+            
+            if (specification.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(specification.OrderByDescending);
+            }
+
             return query;
         }
     }

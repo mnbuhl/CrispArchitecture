@@ -38,9 +38,9 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string sort)
         {
-            IList<Customer> customers = await _customerRepository.GetAllAsync(new CustomersSpecification());
+            IList<Customer> customers = await _customerRepository.GetAllAsync(new CustomersSpecification(sort));
             return Ok(_mapper.Map<List<CustomerResponseDto>>(customers));
         }
 

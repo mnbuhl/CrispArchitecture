@@ -5,12 +5,23 @@ namespace CrispArchitecture.Application.Specifications.Orders
 {
     public class OrdersSpecification : BaseSpecification<Order>
     {
-        public OrdersSpecification()
+        public OrdersSpecification(string sort)
         {
-        }
-
-        public OrdersSpecification(Guid id) : base(x => x.Id == id)
-        {
+            switch (sort)
+            {
+                case "totalAsc":
+                    AddOrderBy(x => x.Total);
+                    break;
+                case "totalDesc":
+                    AddOrderByDescending(x => x.Total);
+                    break;
+                case "dateAsc":
+                    AddOrderBy(x => x.CreatedAt);
+                    break;
+                default:
+                    AddOrderByDescending(x => x.CreatedAt);
+                    break;
+            }
         }
     }
 }

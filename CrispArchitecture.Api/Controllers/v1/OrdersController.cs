@@ -40,9 +40,9 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string sort)
         {
-            IList<Order> orders = await _orderRepository.GetAllAsync(new OrdersSpecification());
+            IList<Order> orders = await _orderRepository.GetAllAsync(new OrdersSpecification(sort));
             return Ok(_mapper.Map<List<OrderResponseDto>>(orders));
         }
         

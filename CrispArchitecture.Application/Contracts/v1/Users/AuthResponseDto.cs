@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CrispArchitecture.Application.Contracts.v1.Users
 {
     public class AuthResponseDto

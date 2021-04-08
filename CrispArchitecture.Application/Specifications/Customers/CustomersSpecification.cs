@@ -5,12 +5,17 @@ namespace CrispArchitecture.Application.Specifications.Customers
 {
     public class CustomersSpecification : BaseSpecification<Customer>
     {
-        public CustomersSpecification()
+        public CustomersSpecification(string sort)
         {
-        }
-
-        public CustomersSpecification(Guid id) : base(x => x.Id == id)
-        {
+            switch (sort)
+            {
+                case "id":
+                    AddOrderBy(x => x.Id);
+                    break;
+                default:
+                    AddOrderBy(x => x.Name);
+                    break;
+            }
         }
     }
 }

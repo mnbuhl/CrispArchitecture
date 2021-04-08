@@ -9,5 +9,7 @@ namespace CrispArchitecture.Application.Specifications
     {
         Expression<Func<T, bool>> Criteria { get; }
         Func<IQueryable<T>, IIncludableQueryable<T, object>> Includes { get; }
+        Expression<Func<T, object>> OrderBy { get; }
+        Expression<Func<T, object>> OrderByDescending { get; }
     }
 }

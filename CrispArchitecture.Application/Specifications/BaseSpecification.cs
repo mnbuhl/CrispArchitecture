@@ -9,6 +9,8 @@ namespace CrispArchitecture.Application.Specifications
     {
         public Expression<Func<T, bool>> Criteria { get; }
         public Func<IQueryable<T>, IIncludableQueryable<T, object>> Includes { get; private set; }
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
         public BaseSpecification()
         {
@@ -19,9 +21,19 @@ namespace CrispArchitecture.Application.Specifications
             Criteria = criteria;
         }
 
-        protected void SetIncludes(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes)
+        protected void AddIncludes(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes)
         {
             Includes = includes;
+        }
+
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+        
+        protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+        {
+            OrderByDescending = orderByDescendingExpression;
         }
     }
 }
