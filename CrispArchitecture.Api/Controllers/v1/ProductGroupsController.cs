@@ -2,9 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.ProductGroups;
-using CrispArchitecture.Application.Contracts.v1.Products;
 using CrispArchitecture.Application.Interfaces;
-using CrispArchitecture.Application.Specifications.ProductGroups;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +22,7 @@ namespace CrispArchitecture.Api.Controllers.v1
             _productGroupRepository = productGroupRepository;
             _mapper = mapper;
         }
-        
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductGroupCommandDto productGroupRequest)
