@@ -6,6 +6,7 @@ using CrispArchitecture.Api.Helpers;
 using CrispArchitecture.Application.Contracts.v1.Products;
 using CrispArchitecture.Application.Interfaces;
 using CrispArchitecture.Application.Specifications;
+using CrispArchitecture.Application.Specifications.ProductGroups;
 using CrispArchitecture.Application.Specifications.Products;
 using CrispArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -19,14 +20,17 @@ namespace CrispArchitecture.Api.Controllers.v1
     public class ProductsController : ControllerBase
     {
         private readonly IGenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<ProductGroup> _productGroupRepository;
         private readonly IMapper _mapper;
 
-        public ProductsController(IGenericRepository<Product> productRepository, IMapper mapper)
+        public ProductsController(IGenericRepository<Product> productRepository, IMapper mapper,
+            IGenericRepository<ProductGroup> productGroupRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _productGroupRepository = productGroupRepository;
         }
-        
+
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -39,22 +43,22 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] SpecificationParams parameters)
+        public async Task<IActionResult> GetAll([FromQuery] ProductParams parameters)
         {
-            int totalItems = await _productRepository.CountAsync();
+            int totalItems = await _productRepository.CountAsync(new ProductsSpecification(parameters, count: true));
             IList<Product> products = await _productRepository.GetAllAsync(new ProductsSpecification(parameters));
-            
+
             var data = _mapper.Map<List<ProductResponseDto>>(products);
-            
+
             var paginationResult =
                 new Pagination<ProductResponseDto>(parameters.PageIndex, parameters.PageSize, totalItems, data);
-            
+
             return Ok(paginationResult);
         }
-        
+
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]ProductCommandDto productRequest)
+        public async Task<IActionResult> Create([FromBody] ProductCommandDto productRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -65,7 +69,10 @@ namespace CrispArchitecture.Api.Controllers.v1
 
             if (!created)
                 return BadRequest();
-            
+
+            product.ProductGroup =
+                await _productGroupRepository.GetAsync(new ProductGroupsSpecification(productRequest.ProductGroupId));
+
             string locationUri = new LocationUri().GetLocationUri(HttpContext.Request, product.Id.ToString());
             var productResponse = _mapper.Map<ProductResponseDto>(product);
 

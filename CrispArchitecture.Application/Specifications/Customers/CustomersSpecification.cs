@@ -4,7 +4,7 @@ namespace CrispArchitecture.Application.Specifications.Customers
 {
     public class CustomersSpecification : BaseSpecification<Customer>
     {
-        public CustomersSpecification(SpecificationParams parameters)
+        public CustomersSpecification(BaseSpecificationParams parameters)
         {
             ApplyPaging(parameters.PageSize * (parameters.PageIndex - 1), parameters.PageSize);
             

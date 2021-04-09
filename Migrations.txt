@@ -4,3 +4,4 @@ dotnet ef migrations add UpdatingEntityModelToMakeMoreSense -s CrispArchitecture
 dotnet ef migrations add ConfiguredCascadingDeleteOnOrder -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
 dotnet ef migrations add RemovedOriginalEntitiesFromProject -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext
 dotnet ef migrations add InitialIdentityCreate -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppIdentityDbContext -o Identity/Migrations
+dotnet ef migrations add AddProductGroupEntity -s CrispArchitecture.Api -p CrispArchitecture.Infrastructure -c AppDbContext

@@ -79,6 +79,7 @@ namespace CrispArchitecture.Api.Extensions
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
                 opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.RouteConstraintName = "apiVersion";
             });
         }
 

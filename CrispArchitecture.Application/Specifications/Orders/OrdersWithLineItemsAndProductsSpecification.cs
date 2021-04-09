@@ -6,7 +6,7 @@ namespace CrispArchitecture.Application.Specifications.Orders
 {
     public class OrdersWithLineItemsAndProductsSpecification : BaseSpecification<Order>
     {
-        public OrdersWithLineItemsAndProductsSpecification(SpecificationParams parameters)
+        public OrdersWithLineItemsAndProductsSpecification(BaseSpecificationParams parameters)
         {
             ApplyPaging(parameters.PageSize * (parameters.PageIndex - 1), parameters.PageSize);
             

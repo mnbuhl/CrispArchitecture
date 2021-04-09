@@ -16,8 +16,8 @@ namespace CrispArchitecture.Test.IntegrationTests
 {
     public class IntegrationTest : IDisposable
     {
-        protected readonly HttpClient TestClient;
-        protected const string BaseUrl = "http://localhost/api/v1/";
+        protected HttpClient TestClient;
+        protected const string BaseUrl = "https://localhost:5001/api/v1/";
         private readonly IServiceProvider _serviceProvider;
 
         protected IntegrationTest()
@@ -40,10 +40,10 @@ namespace CrispArchitecture.Test.IntegrationTests
                         }
 
                         services.AddDbContext<AppDbContext>(opt =>
-                            opt.UseInMemoryDatabase("AppTestDb"));
+                            opt.UseInMemoryDatabase("NewAppTestDb"));
 
                         services.AddDbContext<AppIdentityDbContext>(opt =>
-                            opt.UseInMemoryDatabase("AppIdentityTestDb"));
+                            opt.UseInMemoryDatabase("NewAppIdentityTestDb"));
                     });
                 });
 

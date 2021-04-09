@@ -39,7 +39,7 @@ namespace CrispArchitecture.Api.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] SpecificationParams parameters)
+        public async Task<IActionResult> GetAll([FromQuery] BaseSpecificationParams parameters)
         {
             int totalItems = await _customerRepository.CountAsync();
             IList<Customer> customers = await _customerRepository.GetAllAsync(new CustomersSpecification(parameters));

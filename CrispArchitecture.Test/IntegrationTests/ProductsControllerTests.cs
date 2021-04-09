@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using CrispArchitecture.Application.Contracts.v1.ProductGroups;
 using CrispArchitecture.Application.Contracts.v1.Products;
 using CrispArchitecture.Application.Specifications;
 using FluentAssertions;
@@ -31,7 +32,7 @@ namespace CrispArchitecture.Test.IntegrationTests
         {
             // Arrange
             await AuthenticateAsync();
-            var productResponse = await CreateProductAsync();
+            var productResponse = await CreateProductAndGroupAsync();
 
             // Act
             var response = await TestClient.GetAsync(BaseUrl + "products/" + productResponse.Id);
@@ -59,7 +60,7 @@ namespace CrispArchitecture.Test.IntegrationTests
         {
             // Arrange
             await AuthenticateAsync();
-            var productResponse = await CreateProductAsync();
+            var productResponse = await CreateProductAndGroupAsync();
 
             // Act
             var response = await TestClient.GetAsync(BaseUrl + "products");
@@ -81,7 +82,7 @@ namespace CrispArchitecture.Test.IntegrationTests
 
             for (int i = 0; i < 10; i++)
             {
-                products.Add(await CreateProductAsync());
+                products.Add(await CreateProductAndGroupAsync());
             }
 
             // Act
@@ -140,7 +141,7 @@ namespace CrispArchitecture.Test.IntegrationTests
             var product = new ProductCommandDto
             {
                 Name = "Test",
-                Price = 500
+                Price = 500,
             };
 
             // Act
@@ -150,7 +151,7 @@ namespace CrispArchitecture.Test.IntegrationTests
             // Assert
             var productResponse = await response.Content.ReadFromJsonAsync<ProductResponseDto>();
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-            productResponse.Should().BeEquivalentTo(product);
+            productResponse.Should().BeEquivalentTo(new {Name = "Test", Price = 500});
         }
 
         [Fact]
@@ -172,12 +173,13 @@ namespace CrispArchitecture.Test.IntegrationTests
         {
             // Arrange
             await AuthenticateAsync();
-            var productToUpdate = await CreateProductAsync();
+            var productToUpdate = await CreateProductAndGroupAsync();
 
             var newProduct = new ProductCommandDto
             {
                 Name = "New Test",
-                Price = 520
+                Price = 520,
+                ProductGroupId = Guid.Parse("AD729B2B-CEAD-4829-6E2D-08D8FB4E8816")
             };
 
             // Act
@@ -219,7 +221,7 @@ namespace CrispArchitecture.Test.IntegrationTests
         {
             // Arrange
             await AuthenticateAsync();
-            var createdProduct = await CreateProductAsync();
+            var createdProduct = await CreateProductAndGroupAsync();
 
             // Act
             var response = await TestClient.DeleteAsync(Url + createdProduct.Id);
@@ -246,15 +248,24 @@ namespace CrispArchitecture.Test.IntegrationTests
         }
 
         // AUTHENTICATE BEFORE USING
-        private async Task<ProductResponseDto> CreateProductAsync(ProductCommandDto productRequest = null)
+        private async Task<ProductResponseDto> CreateProductAndGroupAsync()
         {
-            var product = productRequest ?? new ProductCommandDto
+            var productGroup = new ProductGroupCommandDto
             {
-                Name = "Test product",
-                Price = 300
+                Name = "Test"
+            };
+            
+            var responseProductGroup = await TestClient.PostAsJsonAsync(BaseUrl + "ProductGroups/", productGroup);
+            var pgResponse = await responseProductGroup.Content.ReadFromJsonAsync<ProductGroupResponseDto>();
+            
+            var product = new ProductCommandDto
+            {
+                Name = Guid.NewGuid().ToString(),
+                Price = 999,
+                ProductGroupId = pgResponse!.Id
             };
 
-            var response = await TestClient.PostAsJsonAsync(BaseUrl + "products", product);
+            var response = await TestClient.PostAsJsonAsync(Url, product);
             return await response.Content.ReadFromJsonAsync<ProductResponseDto>();
         }
     }

@@ -8,7 +8,9 @@ namespace CrispArchitecture.Application.Contracts.v1.Products
         public MappingProfile()
         {
             CreateMap<ProductCommandDto, Product>();
-            CreateMap<Product, ProductResponseDto>();
+            CreateMap<Product, ProductResponseDto>()
+                .ForMember(dest => dest.ProductGroup, opt =>
+                    opt.MapFrom(src => src.ProductGroup.Name));
         }
     }
 }

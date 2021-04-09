@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrispArchitecture.Application.Contracts.v1.Products
@@ -8,5 +9,7 @@ namespace CrispArchitecture.Application.Contracts.v1.Products
         public string Name { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
+        public Guid ProductGroupId { get; set; }
     }
 }

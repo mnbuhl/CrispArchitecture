@@ -15,36 +15,56 @@ namespace CrispArchitecture.Infrastructure.Data
             Guid product3 = Guid.NewGuid();
             Guid product4 = Guid.NewGuid();
 
-            if (!context.Products.Any())
+            if (!context.Products.Any() && !context.ProductGroups.Any())
             {
+                var productGroup1 = new ProductGroup
+                {
+                    Name = "Chairs"
+                };
+                
+                var productGroup2 = new ProductGroup
+                {
+                    Name = "Desks"
+                };
+                
+                var productGroup3 = new ProductGroup
+                {
+                    Name = "Storage"
+                };
+                
                 List<Product> products = new List<Product>
                 {
                     new Product
                     {
                         Id = product1,
                         Name = "Office Chair",
-                        Price = 149.99
+                        Price = 149.99,
+                        ProductGroup = productGroup1
                     },
                     new Product
                     {
                         Id = product2,
                         Name = "Height Adjustable Desk",
-                        Price = 409.99
+                        Price = 409.99,
+                        ProductGroup = productGroup2
                     },
                     new Product
                     {
                         Id = product3,
                         Name = "Desk Drawer",
-                        Price = 129.99
+                        Price = 129.99,
+                        ProductGroup = productGroup3
                     },
                     new Product
                     {
                         Id = product4,
                         Name = "L-Shaped Desk",
-                        Price = 399.99
+                        Price = 399.99,
+                        ProductGroup = productGroup2
                     },
                 };
 
+                await context.ProductGroups.AddRangeAsync(productGroup1, productGroup2, productGroup3);
                 await context.Products.AddRangeAsync(products);
             }
 
