@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using CrispArchitecture.Application.Contracts.v1.Products;
+using CrispArchitecture.Application.Specifications;
 using FluentAssertions;
 using Xunit;
 
@@ -50,7 +51,7 @@ namespace CrispArchitecture.Test.IntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadFromJsonAsync<List<ProductResponseDto>>()).Should().BeEmpty();
+            (await response.Content.ReadFromJsonAsync<Pagination<ProductResponseDto>>())?.Data.Should().BeEmpty();
         }
 
         [Fact]
@@ -65,10 +66,10 @@ namespace CrispArchitecture.Test.IntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var returnedProducts = await response.Content.ReadFromJsonAsync<List<ProductResponseDto>>();
+            var returnedProducts = await response.Content.ReadFromJsonAsync<Pagination<ProductResponseDto>>();
 
-            returnedProducts.Should().HaveCount(1);
-            returnedProducts.Should().ContainEquivalentOf(productResponse);
+            returnedProducts?.Data.Should().HaveCount(1);
+            returnedProducts?.Data.Should().ContainEquivalentOf(productResponse);
         }
 
         [Fact]
@@ -84,14 +85,14 @@ namespace CrispArchitecture.Test.IntegrationTests
             }
 
             // Act
-            var response = await TestClient.GetAsync(BaseUrl + "products");
+            var response = await TestClient.GetAsync(BaseUrl + "products?pageSize=10");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var returnedProducts = await response.Content.ReadFromJsonAsync<List<ProductResponseDto>>();
+            var returnedProducts = await response.Content.ReadFromJsonAsync<Pagination<ProductResponseDto>>();
 
-            returnedProducts.Should().HaveCount(10);
-            returnedProducts.Should().BeEquivalentTo(products);
+            returnedProducts?.Data.Should().HaveCount(10);
+            returnedProducts?.Data.Should().BeEquivalentTo(products);
         }
 
         [Fact]
@@ -109,11 +110,11 @@ namespace CrispArchitecture.Test.IntegrationTests
                 await TestClient.PostAsJsonAsync(BaseUrl + "products", product);
 
             var httpResponse = await TestClient.GetAsync(Url);
-            var returnedProducts = await httpResponse.Content.ReadFromJsonAsync<List<ProductResponseDto>>();
+            var returnedProducts = await httpResponse.Content.ReadFromJsonAsync<Pagination<ProductResponseDto>>();
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            returnedProducts.Should().BeEmpty();
+            returnedProducts?.Data.Should().BeEmpty();
         }
 
         [Fact]

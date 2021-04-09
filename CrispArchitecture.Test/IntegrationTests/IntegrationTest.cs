@@ -16,7 +16,7 @@ namespace CrispArchitecture.Test.IntegrationTests
 {
     public class IntegrationTest : IDisposable
     {
-        protected HttpClient TestClient;
+        protected readonly HttpClient TestClient;
         protected const string BaseUrl = "http://localhost/api/v1/";
         private readonly IServiceProvider _serviceProvider;
 
